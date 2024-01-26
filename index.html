@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="ko">
+  <head>
+    <meta charset="UTF-8" />
+    <title>계산기 레이아웃</title>
+    <link rel="stylesheet" href="./style.css" />
+  </head>
+  <body>
+    <div class="calculator">
+      <div class="display-container">
+        <div class="line">
+          <!-- <span class="number">1,000,000,000 × 5% + 13,000,000</span>
+          <span class="korean">10억 × 5% + 1,300만</span> -->
+          <span class="number"></span>
+          <span class="korean"></span>
+        </div>
+        <div class="dotted-line"></div>
+        <div class="line result">
+          <!-- <span class="total">63,000,000</span>
+            <span class="total-korean">6,300만</span> -->
+          <span class="total"></span>
+          <span class="total-korean"></span>
+        </div>
+      </div>
+
+      <div class="buttons">
+        <!-- 첫 번째 행 -->
+        <button class="special red">AC</button>
+        <div class="button-container">
+          <!-- 작게 만든 버튼 -->
+          <button class="small-button">(</button>
+          <!-- 작게 만든 버튼 -->
+          <button class="small-button">)</button>
+        </div>
+        <button class="special">delete</button>
+        <button class="special">%</button>
+        <button class="blue">÷</button>
+        <!-- 두 번째 행 -->
+        <button>7</button>
+        <button>8</button>
+        <button>9</button>
+        <button class="special">조</button>
+        <button class="blue">×</button>
+        <!-- 세 번째 행 -->
+        <button>4</button>
+        <button>5</button>
+        <button>6</button>
+        <button class="special">억</button>
+        <button class="blue">-</button>
+        <!-- 네 번째 행 -->
+        <button>1</button>
+        <button>2</button>
+        <button>3</button>
+        <button class="special">만</button>
+        <button class="blue">+</button>
+        <!-- 다섯 번째 행 -->
+        <button>.</button>
+        <button>0</button>
+        <button>000</button>
+        <button class="special tab">Tab</button>
+        <button class="blue">=</button>
+      </div>
+    </div>
+  </body>
+
+  <!-- include mathjs -->
+  <script
+    src="https://cdnjs.cloudflare.com/ajax/libs/mathjs/12.3.0/math.js"
+    integrity="sha512-TaKu3GlWLNU3fyPcvsSHSh44vX/Z43ePJDRTJr7IuUKVlUHHsHm7ODYNt5xffy75M6MOXsh7p+VyXCk5icuoxQ=="
+    crossorigin="anonymous"
+    referrerpolicy="no-referrer"
+  ></script>
+  <script src="./script.js"></script>
+</html>

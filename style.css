@@ -1,0 +1,152 @@
+/* 기본 리셋과 박스 모델 정의 */
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+/* 전체 배경과 폰트 설정 */
+body {
+  font-family: "Arial", sans-serif;
+  background-color: #4a5568;
+  margin: 0;
+  height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* 계산기 전체 스타일 */
+.calculator {
+  width: 400px;
+  background-color: #ffffff;
+  padding: 20px;
+  border-radius: 10px;
+  box-shadow: 0 0 20px rgba(0, 0, 0, 0.2);
+}
+
+/* 디스플레이 및 결과 스타일 */
+.display-container {
+  background-color: #f7fafc;
+  padding: 20px;
+  border-radius: 5px;
+  margin-bottom: 20px;
+  position: relative;
+}
+
+.line,
+.dotted-line {
+  gap: 5px;
+  display: flex;
+  flex-direction: column;
+}
+
+.result {
+  align-items: flex-end;
+}
+
+.dotted-line {
+  border-top: 1px dashed #bbb;
+  margin: 10px 0;
+}
+
+.line span {
+  display: flex;
+  justify-content: space-between;
+  text-wrap: pretty;
+  overflow-wrap: anywhere;
+}
+
+.number,
+.korean {
+  font-size: 1em;
+  text-wrap: pretty;
+}
+
+.number {
+  color: #333;
+}
+
+.korean {
+  font-size: 0.8em;
+  color: #888;
+}
+
+.total {
+  color: #333;
+  font-size: 1.5em;
+  text-wrap: pretty;
+  font-weight: bold;
+}
+
+.total-korean {
+  color: #555;
+  font-size: 0.9em;
+  text-wrap: pretty;
+}
+
+/* 버튼 스타일 */
+.buttons {
+  display: grid;
+  grid-template-columns: repeat(5, 1fr);
+  grid-gap: 10px;
+}
+
+button {
+  padding: 20px;
+  border-radius: 5px;
+  border: none;
+  background-color: #e2e8f0;
+  font-size: 1.2em;
+  color: #2d3748;
+  box-shadow: 1px 1px 6px rgba(0, 0, 0, 0.1);
+  transition: background-color 0.3s;
+}
+
+button:hover {
+  background-color: #cbd5e0;
+}
+
+button:active {
+  background-color: #a0aec0;
+}
+
+.blue {
+  background-color: #3182ce;
+  color: white;
+}
+
+.red {
+  color: red;
+}
+
+.tab {
+  background-color: #63b3ed;
+  color: white;
+}
+
+.small-button {
+  padding: 10px;
+  font-size: 0.75em;
+  grid-column: span 1;
+  height: 100%;
+  flex: 1;
+}
+
+.button-container {
+  grid-column: span 1;
+  display: flex;
+  gap: 10px;
+}
+
+/* 레이아웃 개선을 위한 추가 스타일 */
+.special {
+  font-size: 0.9em;
+  padding: 15px;
+}
+
+.wide {
+  grid-column: span 2;
+}
