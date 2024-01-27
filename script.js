@@ -25,6 +25,7 @@ document.addEventListener("DOMContentLoaded", () => {
   function updateMainDisplay() {
     if (isMultiLineDisplay) {
       updateLineBreakDisplay(); // 여러 줄 디스플레이 모드일 때만 업데이트
+      updateKoreanDisplay(); // 한글 값도 업데이트
     } else {
       uiElements.displayNumber.textContent = formatDisplayValue(currentInput);
       uiElements.displayKorean.textContent = numberToKorean(currentInput);
@@ -39,7 +40,6 @@ document.addEventListener("DOMContentLoaded", () => {
     }
   }
 
-  // 숫자를 한국어로 변환하는 함수
   function numberToKorean(expression) {
     const units = ["", "만", "억", "조", "경"];
     const tokenRegex = /(\d[\d,]*|\D)/g;
@@ -150,6 +150,34 @@ document.addEventListener("DOMContentLoaded", () => {
           currentInput === "0" ? buttonValue : currentInput + buttonValue;
     }
     updateMainDisplay();
+  }
+
+  // 여러 줄 모드일 때 한글 값 업데이트
+  function updateKoreanDisplay() {
+    if (!isMultiLineDisplay) return; // 여러 줄 모드가 아니면 함수 종료
+
+    const inputParts = currentInput.split(/([+\-*/])/);
+    let formattedLine = '<div class="multiline-display">';
+
+    for (let i = 0; i < inputParts.length; i++) {
+      const currentPart = inputParts[i].trim();
+
+      if (currentPart) {
+        if (/[+\-*/]/.test(currentPart)) {
+          formattedLine += `<span class="operator">${currentPart}</span>`;
+        } else {
+          formattedLine += `<span class="number">${numberToKorean(
+            currentPart
+          )}</span>`;
+          if (i < inputParts.length - 1) {
+            formattedLine += '</div><div class="multiline-display">';
+          }
+        }
+      }
+    }
+
+    formattedLine += "</div>";
+    uiElements.displayKorean.innerHTML = formattedLine;
   }
 
   uiElements.buttons.forEach((button) =>
