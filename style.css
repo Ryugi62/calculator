@@ -54,6 +54,7 @@ body {
 
 .line span {
   display: flex;
+  flex-direction: column;
   justify-content: space-between;
   text-wrap: pretty;
   overflow-wrap: anywhere;
@@ -149,4 +150,22 @@ button:active {
 
 .wide {
   grid-column: span 2;
+}
+
+.multiline-display {
+  margin-bottom: 0.5em; /* Adds a little space between each line */
+  font-size: 1em; /* Adjusts the font size */
+  color: #333; /* Sets the text color for better readability */
+  display: flex; /* Enables flexible box layout */
+  align-items: center; /* Centers items vertically in the line */
+  justify-content: space-between; /* Distributes space between and around content items */
+}
+
+.multiline-display .number {
+  margin-left: auto;
+}
+
+.multiline-display .operator {
+  margin: 0 0.25em; /* Adds margin around operators for clarity */
+  color: #555; /* Sets a different color for operators */
 }

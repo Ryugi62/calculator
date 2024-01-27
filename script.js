@@ -1,27 +1,45 @@
 document.addEventListener("DOMContentLoaded", () => {
-  const elements = {
-    displayNumber: document.querySelector(".number"),
-    displayKorean: document.querySelector(".korean"),
-    totalDisplay: document.querySelector(".total"),
-    totalKorean: document.querySelector(".total-korean"),
-    buttons: document.querySelectorAll(".buttons button"),
-  };
-
+  const uiElements = getUIElements();
   let currentInput = "0";
+  let isMultiLineDisplay = false; // 여러 줄 디스플레이 모드 추적을 위한 변수
 
-  const numberWithCommas = (x) =>
-    x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
-  const formatDisplayValue = (value) =>
-    value.replace(/(\d+)/g, (match) => numberWithCommas(match));
-  const updateDisplay = () => {
-    elements.displayNumber.textContent = formatDisplayValue(currentInput);
-    elements.displayKorean.textContent = numberToKorean(currentInput);
-    if (currentInput === "0") {
-      elements.totalDisplay.textContent = "0";
-      elements.totalKorean.textContent = "0";
+  function getUIElements() {
+    return {
+      displayNumber: document.querySelector(".number"),
+      displayKorean: document.querySelector(".korean"),
+      totalDisplay: document.querySelector(".total"),
+      totalKorean: document.querySelector(".total-korean"),
+      buttons: document.querySelectorAll(".buttons button"),
+      lineBreakButton: document.getElementById("lineBreakButton"),
+    };
+  }
+
+  function formatNumberWithCommas(number) {
+    return number.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+  }
+
+  function formatDisplayValue(value) {
+    return value.replace(/(\d+)/g, (match) => formatNumberWithCommas(match));
+  }
+
+  function updateMainDisplay() {
+    if (isMultiLineDisplay) {
+      updateLineBreakDisplay(); // 여러 줄 디스플레이 모드일 때만 업데이트
+    } else {
+      uiElements.displayNumber.textContent = formatDisplayValue(currentInput);
+      uiElements.displayKorean.textContent = numberToKorean(currentInput);
     }
-  };
+    resetTotalDisplayIfNeeded();
+  }
 
+  function resetTotalDisplayIfNeeded() {
+    if (currentInput === "0") {
+      uiElements.totalDisplay.textContent = "0";
+      uiElements.totalKorean.textContent = "0";
+    }
+  }
+
+  // 숫자를 한국어로 변환하는 함수
   function numberToKorean(expression) {
     const units = ["", "만", "억", "조", "경"];
     const tokenRegex = /(\d[\d,]*|\D)/g;
@@ -30,11 +48,11 @@ document.addEventListener("DOMContentLoaded", () => {
       .match(tokenRegex)
       .map((token) => {
         if (isNaN(token.replace(/,/g, ""))) {
-          return token; // Return non-numeric tokens (like operators and spaces) as is
+          return token;
         }
 
         let koreanNumber = "";
-        let num = parseInt(token.replace(/,/g, ""), 10); // Remove commas for parsing
+        let num = parseInt(token.replace(/,/g, ""), 10);
 
         let numGroups = [];
         while (num > 0) {
@@ -55,7 +73,8 @@ document.addEventListener("DOMContentLoaded", () => {
       .join("");
   }
 
-  const calculate = () => {
+  // 수식 계산 함수
+  function calculateExpression() {
     try {
       let expression = currentInput
         .replace(/,/g, "")
@@ -71,9 +90,37 @@ document.addEventListener("DOMContentLoaded", () => {
       alert(error.message || "Invalid expression");
       return "Error";
     }
-  };
+  }
 
-  const handleButtonClick = (buttonValue) => {
+  function updateLineBreakDisplay() {
+    if (!isMultiLineDisplay) return; // 여러 줄 모드가 아니면 함수 종료
+
+    const inputParts = currentInput.split(/([+\-*/])/);
+    let formattedLine = '<div class="multiline-display">';
+
+    for (let i = 0; i < inputParts.length; i++) {
+      const currentPart = inputParts[i].trim();
+
+      if (currentPart) {
+        if (/[+\-*/]/.test(currentPart)) {
+          formattedLine += `<span class="operator">${currentPart}</span>`;
+        } else {
+          formattedLine += `<span class="number">${formatDisplayValue(
+            currentPart
+          )}</span>`;
+          if (i < inputParts.length - 1) {
+            formattedLine += '</div><div class="multiline-display">';
+          }
+        }
+      }
+    }
+
+    formattedLine += "</div>";
+    uiElements.displayNumber.innerHTML = formattedLine;
+  }
+
+  // 버튼 클릭 처리 함수
+  function handleButtonClick(buttonValue) {
     switch (buttonValue) {
       case "AC":
         currentInput = "0";
@@ -85,15 +132,16 @@ document.addEventListener("DOMContentLoaded", () => {
         if (/[+\-*/]$/.test(currentInput)) {
           alert("Invalid ending operator");
         } else {
-          let result = calculate();
+          let result = calculateExpression();
           if (result !== "Error") {
-            elements.totalDisplay.textContent = numberWithCommas(result);
-            elements.totalKorean.textContent = numberToKorean(
+            uiElements.totalDisplay.textContent =
+              formatNumberWithCommas(result);
+            uiElements.totalKorean.textContent = numberToKorean(
               result.toString()
             );
           } else {
-            elements.totalDisplay.textContent = "Error";
-            elements.totalKorean.textContent = "";
+            uiElements.totalDisplay.textContent = "Error";
+            uiElements.totalKorean.textContent = "";
           }
         }
         break;
@@ -101,14 +149,19 @@ document.addEventListener("DOMContentLoaded", () => {
         currentInput =
           currentInput === "0" ? buttonValue : currentInput + buttonValue;
     }
-    updateDisplay();
-  };
+    updateMainDisplay();
+  }
 
-  elements.buttons.forEach((button) =>
+  uiElements.buttons.forEach((button) =>
     button.addEventListener("click", () =>
       handleButtonClick(button.textContent.trim())
     )
   );
 
-  updateDisplay();
+  uiElements.lineBreakButton.addEventListener("click", () => {
+    isMultiLineDisplay = !isMultiLineDisplay; // "여러 줄 보기" 버튼 클릭 시 모드 전환
+    updateMainDisplay();
+  });
+
+  updateMainDisplay();
 });
